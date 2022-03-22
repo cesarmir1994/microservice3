@@ -400,7 +400,7 @@ def Service3():
                         store_google_doc(pText, pHtml)
                 else:
                     logger.info('This document was not considerate')
-        except Exception as error:
+        except Exception as e:
             print('Error while microservice 3')
             reason = 'main service unviable'
             logger.error("main service failed",
