@@ -34,8 +34,8 @@ from tld import get_tld
 import fnmatch
 import random
 
-# chromedriver_path = '/app/chromedriver'
-chromedriver_path = '/usr/bin/chromedriver'
+chromedriver_path = '/app/chromedriver'
+#chromedriver_path = '/usr/bin/chromedriver'
 result_dir = 'result/'
 # ------------------------------------------------------------------
 #                     LOG CONFIGURATION
