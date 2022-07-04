@@ -35,8 +35,8 @@ import fnmatch
 import random
 import docx2txt
 
-# chromedriver_path = '/app/chromedriver'
-chromedriver_path = '/usr/bin/chromedriver'
+chromedriver_path = '/app/chromedriver'
+# chromedriver_path = '/usr/bin/chromedriver'
 result_dir = 'result/'
 # ------------------------------------------------------------------
 #                     LOG CONFIGURATION
