@@ -326,11 +326,11 @@ def OD_html_store(file_name, url_text):
         policy_html = soup.find('body').pre.text
         soup = BeautifulSoup(policy_html, 'html.parser')
         policy_text = soup.find('body').text
-        file = open(result_dir + file_name + '.txt', "w")
-        file.write(policy_text)
+        file = open(result_dir + file_name + '.txt', "wb")
+        file.write(policy_text.encode('utf-8'))
         file.close()
-        file = open(result_dir + file_name + '.html', "w")
-        file.write(policy_html)
+        file = open(result_dir + file_name + '.html', "wb")
+        file.write(policy_html.encode('utf-8'))
         file.close()
     except Exception as e:
         reason = 'Error while downloading html documento from dropbox'
@@ -347,11 +347,11 @@ def OD_text_store(file_name, url_text):
         soup = BeautifulSoup(html, 'html.parser')
         policy_html = (str(soup))
         policy_text = soup.find('body').pre.text
-        file = open( result_dir + file_name + '.txt', "w")
-        file.write(policy_text)
+        file = open( result_dir + file_name + '.txt', "wb")
+        file.write(policy_text.encode('utf-8'))
         file.close()
-        file = open( result_dir + file_name + '.html', "w")
-        file.write(policy_html)
+        file = open( result_dir + file_name + '.html', "wb")
+        file.write(policy_html.encode('utf-8'))
         file.close()
     except Exception as e:
         reason = 'Error while downloading txt documento from dropbox'
@@ -381,8 +381,8 @@ def OD_pdf_store(file_name, url_text, url):
         html = response.content
         soup = BeautifulSoup(html, 'html.parser')
         policy_html = (str(soup))
-        file = open( result_dir + file_name + '.html', "w")
-        file.write(policy_html)
+        file = open( result_dir + file_name + '.html', "wb")
+        file.write(policy_html.encode('utf-8'))
         file.close()
         responde = requests.get(url_text, stream=True, verify=False)
         file = open( result_dir + file_name + '.pdf', 'wb')
@@ -402,8 +402,8 @@ def pdf2text(file_name):
         logger.debug('The text extraction from PDF document was start')
         raw = parser.from_file( result_dir + file_name+'.pdf')
         content = raw['content']
-        file = open( result_dir + file_name + ".txt", "w")
-        file.write(content)
+        file = open( result_dir + file_name + ".txt", "wb")
+        file.write(content.encode('utf-8'))
         file.close()
     except Exception as e:
         reason = 'Error while extract text from pdf document'
@@ -474,12 +474,12 @@ def dropbox_general(url):
 def store_onedrive_docx(policy_text, policy_html, title):
     try:
         logger.debug('The docx started to be store')
-        file = open(result_dir + title + '.txt', "w")
-        file.write(policy_text)
+        file = open(result_dir + title + '.txt', "wb")
+        file.write(policy_text.encode('utf-8'))
         logger.debug("The privacy policy txt was write")
         file.close()
-        file = open(result_dir + title + ".html", "w")
-        file.write(str(policy_html))
+        file = open(result_dir + title + ".html", "wb")
+        file.write((str(policy_html)).encode('utf-8'))
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
@@ -493,21 +493,12 @@ def store_google_doc(policy_text, policy_html, title):
         # n_ram = random.randrange(10, 100, 4)
         # doc_name = 'PolicyPrivacy' + str(n_ram)
         # titulo = ''
-        file = open(result_dir + title + '.txt', "w")
+        file = open(result_dir + title + '.txt', "wb")
         file.write(policy_text)
         logger.debug("The privacy policy txt was write")
         file.close()
-        # with open(result_dir + doc_name + '.txt') as f:
-        #     titulo = f.readlines()[0]
-        #     f.close()
-        # try:
-        #     os.rename(result_dir + doc_name + '.txt', result_dir + titulo + ".txt")
-        #     if titulo is not None:
-        #         doc_name = titulo
-        # except Exception as e:
-        #     logger.error('Unexpectated error during changed name of files')
-        file = open(result_dir + title + ".html", "w")
-        file.write(str(policy_html))
+        file = open(result_dir + title + ".html", "wb")
+        file.write((str(policy_html)).encode('utf-8'))
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
@@ -520,12 +511,12 @@ def store_google_doc(policy_text, policy_html, title):
 def store_text(policytxt, policyhtml, title):
     try:
         logger.debug('The text started to be stored ')
-        file = open(result_dir + title + ".txt", "w")
-        file.write(policytxt)
+        file = open(result_dir + title + ".txt", "wb")
+        file.write(policytxt.encode('utf-8'))
         logger.debug("The privacy policy text was write")
         file.close()
-        file = open(result_dir + title + ".html", "w")
-        file.write(policyhtml)
+        file = open(result_dir + title + ".html", "wb")
+        file.write(policyhtml.encode('utf-8'))
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
