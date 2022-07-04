@@ -571,10 +571,6 @@ def Service3():
                     if csf_docs:
                         print('Descargando el documento Google docs')
                         pText, pHtml, title = download_google_doc(url)
-                        print("Imprimo TXT")
-                        print(pText)
-                        print("Imprimo HTML")
-                        print((pHtml).encode('utf-8').strip())
                         store_google_doc(pText, pHtml, title)
                     if csf_dropbox:
                         print('Descargando el documento desde Dropbox')
