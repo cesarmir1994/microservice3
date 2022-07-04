@@ -3,11 +3,7 @@
 # ------------------------------------------------------------------
 import imp
 import sys
-# import argparse
 import urllib
-import subprocess
-# import pika
-import os
 import json
 import time
 import multiprocessing
@@ -182,8 +178,8 @@ def get_status_code(url):
         return True, 200
 # This function is used to extract the text from web pages
 def download_general_text(url):
-    policy_text = None
-    policy_html = None
+    policy_text = ""
+    policy_html = ""
     n_ram = random.randrange(10, 100, 4)
     titutlo = 'PolicyPrivacy' + str(n_ram)
     TIMEOUT = 60
@@ -210,7 +206,6 @@ def download_general_text(url):
         if title == None:
             title = titulo
         policy_html = driver.page_source
-
     except TimeoutException as e:
         reason = "HTML element has not been load after {} seconds".format(TIMEOUT)
         logger.error("Privacy policy download failed",
@@ -266,6 +261,7 @@ def download_pdf(url):
         for chunk in responde.iter_content(chunk_size=1024):
             if chunk:
                 file.write(chunk)
+        file.close()
     except Exception as e:
         reason = 'Error while downloading pdf documento from the web'
         logger.error("download_pdf download failed",
@@ -273,10 +269,6 @@ def download_pdf(url):
     else:
         logger.info('The pdf download was successful')
         return pdf_name
-        # command = "pdftotext " + result_dir + pdf_name
-        # process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None, shell=True)
-    finally:
-        file.close()
 # This function downloads the docx document from the onedrive website
 def download_onedrive_docx(url):
     try:
@@ -303,7 +295,7 @@ def download_onedrive_docx(url):
             url_text = url_text.replace('\\u0026', '&')
             url_text = url_text.replace('\\u003d', '=')
         responde = requests.get(url_text, stream=True, verify=False)
-        file = open(result_dir + file_name + '.docx', 'wb')
+        file = open(result_dir + file_name + '.docx', 'w')
         for chunk in responde.iter_content(chunk_size=1024):
             if chunk:
                 file.write(chunk)
@@ -326,11 +318,11 @@ def OD_html_store(file_name, url_text):
         policy_html = soup.find('body').pre.text
         soup = BeautifulSoup(policy_html, 'html.parser')
         policy_text = soup.find('body').text
-        file = open(result_dir + file_name + '.txt', "wb")
-        file.write(policy_text.encode('utf-8'))
+        file = open(result_dir + file_name + '.txt', "w")
+        file.write(policy_text)
         file.close()
-        file = open(result_dir + file_name + '.html', "wb")
-        file.write(policy_html.encode('utf-8'))
+        file = open(result_dir + file_name + '.html', "w")
+        file.write(policy_html)
         file.close()
     except Exception as e:
         reason = 'Error while downloading html documento from dropbox'
@@ -347,11 +339,11 @@ def OD_text_store(file_name, url_text):
         soup = BeautifulSoup(html, 'html.parser')
         policy_html = (str(soup))
         policy_text = soup.find('body').pre.text
-        file = open( result_dir + file_name + '.txt', "wb")
-        file.write(policy_text.encode('utf-8'))
+        file = open( result_dir + file_name + '.txt', "w")
+        file.write(policy_text)
         file.close()
-        file = open( result_dir + file_name + '.html', "wb")
-        file.write(policy_html.encode('utf-8'))
+        file = open( result_dir + file_name + '.html', "w")
+        file.write(policy_html)
         file.close()
     except Exception as e:
         reason = 'Error while downloading txt documento from dropbox'
@@ -381,11 +373,11 @@ def OD_pdf_store(file_name, url_text, url):
         html = response.content
         soup = BeautifulSoup(html, 'html.parser')
         policy_html = (str(soup))
-        file = open( result_dir + file_name + '.html', "wb")
-        file.write(policy_html.encode('utf-8'))
+        file = open( result_dir + file_name + '.html', "w")
+        file.write(policy_html))
         file.close()
         responde = requests.get(url_text, stream=True, verify=False)
-        file = open( result_dir + file_name + '.pdf', 'wb')
+        file = open( result_dir + file_name + '.pdf', 'w')
         for chunk in responde.iter_content(chunk_size=1024):
             if chunk:
                 file.write(chunk)
@@ -402,8 +394,8 @@ def pdf2text(file_name):
         logger.debug('The text extraction from PDF document was start')
         raw = parser.from_file( result_dir + file_name+'.pdf')
         content = raw['content']
-        file = open( result_dir + file_name + ".txt", "wb")
-        file.write(content.encode('utf-8'))
+        file = open( result_dir + file_name + ".txt", "w")
+        file.write(content)
         file.close()
     except Exception as e:
         reason = 'Error while extract text from pdf document'
@@ -425,7 +417,6 @@ def dropbox_general(url):
         formato = aux2_titulo.split('-')[1].split('.')[1]
         policyhtml = (str(soup))
         file_name = titulo + str(random.randrange(10, 100, 4))
-
         tag = ''
         if formato == 'txt':
             logger.debug('apply TXT method')
@@ -474,12 +465,12 @@ def dropbox_general(url):
 def store_onedrive_docx(policy_text, policy_html, title):
     try:
         logger.debug('The docx started to be store')
-        file = open(result_dir + title + '.txt', "wb")
-        file.write(policy_text.encode('utf-8'))
+        file = open(result_dir + title + '.txt', "w")
+        file.write(policy_text)
         logger.debug("The privacy policy txt was write")
         file.close()
-        file = open(result_dir + title + ".html", "wb")
-        file.write((str(policy_html)).encode('utf-8'))
+        file = open(result_dir + title + ".html", "w")
+        file.write(str(policy_html))
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
@@ -490,15 +481,12 @@ def store_onedrive_docx(policy_text, policy_html, title):
 def store_google_doc(policy_text, policy_html, title):
     try:
         logger.debug('The doc started to be store')
-        # n_ram = random.randrange(10, 100, 4)
-        # doc_name = 'PolicyPrivacy' + str(n_ram)
-        # titulo = ''
-        file = open(result_dir + title + '.txt', "wb")
+        file = open(result_dir + title + '.txt', "w")
         file.write(policy_text)
         logger.debug("The privacy policy txt was write")
         file.close()
-        file = open(result_dir + title + ".html", "wb")
-        file.write((str(policy_html)).encode('utf-8'))
+        file = open(result_dir + title + ".html", "w")
+        file.write(str(policy_html))
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
@@ -511,12 +499,12 @@ def store_google_doc(policy_text, policy_html, title):
 def store_text(policytxt, policyhtml, title):
     try:
         logger.debug('The text started to be stored ')
-        file = open(result_dir + title + ".txt", "wb")
-        file.write(policytxt.encode('utf-8'))
+        file = open(result_dir + title + ".txt", "w")
+        file.write(policytxt)
         logger.debug("The privacy policy text was write")
         file.close()
-        file = open(result_dir + title + ".html", "wb")
-        file.write(policyhtml.encode('utf-8'))
+        file = open(result_dir + title + ".html", "w")
+        file.write(policyhtml)
         logger.debug("The privacy policy html was write")
         file.close()
     except Exception as e:
@@ -548,10 +536,10 @@ def Service3():
     path = input()
     elements = apk_list(path)
     for url in elements:
-        print(url)
         logger.info('Executing the microservice')
         try:
             print('-----------------------------------')
+            print(url)
             [state, code] = get_status_code(url)
             logger.info(str(state) + ' , ' + str(code))
             if state == True and code == 200:
