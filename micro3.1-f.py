@@ -295,7 +295,7 @@ def download_onedrive_docx(url):
             url_text = url_text.replace('\\u0026', '&')
             url_text = url_text.replace('\\u003d', '=')
         responde = requests.get(url_text, stream=True, verify=False)
-        file = open(result_dir + file_name + '.docx', 'w')
+        file = open(result_dir + file_name + '.docx', 'wb')
         for chunk in responde.iter_content(chunk_size=1024):
             if chunk:
                 file.write(chunk)
