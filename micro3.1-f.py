@@ -374,7 +374,7 @@ def OD_pdf_store(file_name, url_text, url):
         soup = BeautifulSoup(html, 'html.parser')
         policy_html = (str(soup))
         file = open( result_dir + file_name + '.html', "w")
-        file.write(policy_html))
+        file.write(policy_html)
         file.close()
         responde = requests.get(url_text, stream=True, verify=False)
         file = open( result_dir + file_name + '.pdf', 'w')
