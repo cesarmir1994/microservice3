@@ -541,7 +541,7 @@ def apk_list(path):
 # ----------------------------------------------------------------
 # Comprobation of input arguments for the execute
 def Service3():
-    print('Enter to the Microserice 1')
+    print('Enter to the Microserice 3')
     path = input()
     elements = apk_list(path)
     i = 0
@@ -560,7 +560,7 @@ def Service3():
                 if downloadFlag == True:
                     logger.debug('The download is possible')
                     if csf_drive or csf_html:
-                        print('Descargando el documento google Drive o HTML')
+                        print('Descargando el documento web')
                         pText, pHtml, title = download_general_text(url)
                         store_text(pText, pHtml, title)
                     if csf_pdf:
@@ -568,20 +568,20 @@ def Service3():
                         pdf_name = download_pdf(url)
                         pdf2text(pdf_name)
                     if csf_docs:
-                        print('Descargando el documento Google docs')
+                        print('Descargando el documento de Google docs')
                         pText, pHtml, title = download_google_doc(url)
                         store_google_doc(pText, pHtml, title)
                     if csf_dropbox:
                         print('Descargando el documento desde Dropbox')
                         dropbox_general(url)
                 elif downloadFlag == False:
-                    logger.info('This case can be download docx from onedrive')
+                    logger.info('This case can be download docx from OneDrive')
                     if csf_onedrive:
                         print('Descargando el documento OneDrive docx')
                         pText, pHtml, title = download_onedrive_docx(url)
                         store_onedrive_docx(pText, pHtml, title)
             else:
-                    logger.info('Problems with thw url response')
+                    logger.info('Problems with the URL response')
                     print('Problems with the url state')
         except Exception as e:
             print('Error while microservice 3')
@@ -589,7 +589,7 @@ def Service3():
             logger.error("main service failed",
                          extra={'exception_message': str(e), 'reason': reason})
         else:
-            print('Se acabo de procesar la URL de la Politica de privacida')
+            print('Se acabo la descarga de la Politica de privacida')
             print('-------------------------------------------------------')
             print()
     logger.info('Exit to the microservice')
